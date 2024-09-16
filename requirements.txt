@@ -1,0 +1,15 @@
+transformers==4.43.1
+numpy==1.23.5
+omegaconf
+opencv-python
+clip
+rich
+pandas
+decord
+spacy
+nltk
+pywsd
+openai-clip
+sentencepiece
+timm
+accelerate
