@@ -36,22 +36,24 @@ def main():
     now = datetime.datetime.now()
     time_str = now.strftime("%Y-%m-%d_%H-%M")
 
-    results_dir = pathlib.Path(config.results_dir)
-    results_dir = results_dir / config.dataset.dataset_name / config.dataset.split / config.mode / f"{config.exp_name}_{time_str}"
+    config = OmegaConf.load('configs/base_config.yaml') # changed snippet
+
+    results_dir = pathlib.Path(config['results_dir'])
+    results_dir = results_dir / config['dataset']['dataset_name'] / config['dataset']['split'] / config['mode'] / f"{config['exp_name']}_{time_str}"
     results_dir.mkdir(parents=True, exist_ok=True)
     filename_json = os.path.join(results_dir, "results.json")
     
     console = FileLoggingConsole(path=os.path.join(results_dir,"results.log"), highlight=False, record=True)
     console.log(OmegaConf.to_container(config))
 
-    set_seed(config.seed)
+    set_seed(config['seed'])
 
-    batch_size = config.dataset.batch_size
+    batch_size = config['dataset']['batch_size']
     num_processes = min(batch_size, 50)
     
-    interpreter = ProgramInterpreter(config=config, mode=config.mode)
+    interpreter = ProgramInterpreter(config=config, mode=config['mode']) # occur error
     
-    dataset = get_dataset(config.dataset)
+    dataset = get_dataset(config['dataset'])
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=0, pin_memory=True,
                             collate_fn=my_collate)
 
